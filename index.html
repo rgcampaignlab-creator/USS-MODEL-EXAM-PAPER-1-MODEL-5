@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART VIDHYA USS MODEL EXAM 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;500;600;700;800&family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --navy:#0b3c68; --navy-2:#134f86; --ink:#16202c; --muted:#5b6778;
+    --paper:#ffffff; --bg:#eef2f6; --line:#cfd8e3; --omr:#c2415b; --omr-soft:#fbe9ed;
+    --ok:#15803d; --ok-soft:#e7f6ec; --bad:#b91c1c; --bad-soft:#fdecec;
+    --a:#0f766e; --a-soft:#e6f4f2; --b:#0b3c68; --b-soft:#e8f0f8; --c:#b45309; --c-soft:#fdf2e3;
+    --r:12px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-padding-top:140px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Anek Malayalam','Noto Sans',system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-tap-highlight-color:transparent}
+  .font-arabic{font-family:'Amiri',serif;font-size:1.2em}
+  .font-urdu{font-family:'Noto Nastaliq Urdu',serif;line-height:2.3}
+  .font-sanskrit{font-family:'Noto Sans Devanagari','Anek Malayalam',sans-serif}
+  button{font:inherit;cursor:pointer}
+  button:focus-visible,input:focus-visible,.opt:focus-visible{outline:3px solid #f5b301;outline-offset:2px}
+  .wrap{max-width:780px;margin:0 auto;padding:16px 14px 60px}
+
+  /* Masthead */
+  .mast{background:var(--navy);color:#fff}
+  .mast .wrap{padding:18px 14px 16px}
+  .mast h1{margin:0;font-size:clamp(1.25rem,4.6vw,1.8rem);font-weight:800;letter-spacing:.02em;line-height:1.2}
+  .mast p{margin:4px 0 0;color:#c9d9ea;font-size:.95rem}
+  .mast-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);padding:8px 14px;border-radius:999px;font-weight:700;font-size:.9rem}
+  .btn-ghost:hover{background:rgba(255,255,255,.12)}
+  .steps{display:flex;gap:6px;margin-top:14px}
+  .steps span{flex:1;font-size:.82rem;font-weight:700;color:#9fb8d3;border-top:4px solid rgba(255,255,255,.2);padding-top:6px}
+  .steps span.on{color:#fff;border-color:#f5b301}
+  .steps span.done{color:#d7e5f3;border-color:#7fb3e0}
+
+  .screen{display:none}
+  .screen.show{display:block}
+
+  /* OMR sheet (registration) */
+  .sheet{background:var(--paper);border:2px solid var(--omr);border-radius:6px;padding:18px;position:relative;margin-top:18px}
+  .sheet::before{content:"";position:absolute;inset:5px;border:1px solid var(--omr);border-radius:3px;pointer-events:none;opacity:.5}
+  .sheet-title{text-align:center;color:var(--omr);font-weight:800;font-size:1.05rem;border-bottom:2px solid var(--omr);padding-bottom:10px;margin:0 0 16px}
+  .field{border:1.5px solid var(--omr);border-radius:4px;padding:12px;margin-bottom:14px;background:#fff}
+  .field > label,.field .lbl{display:block;color:var(--omr);font-weight:800;font-size:.9rem;margin-bottom:8px}
+  .field .hint{font-size:.8rem;color:var(--muted);margin-top:6px}
+  .field input[type=text]{width:100%;padding:11px 12px;border:1.5px solid #9aa7b6;border-radius:6px;font-size:1.05rem;font-weight:700;letter-spacing:.06em;color:var(--ink)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:640px){.grid2{grid-template-columns:1fr}}
+  .roll-matrix{display:flex;justify-content:space-between;gap:4px;margin-top:10px;max-width:300px}
+  .roll-col{display:flex;flex-direction:column;align-items:center;gap:3px}
+  .rb{width:24px;height:24px;border:1.3px solid var(--omr);border-radius:50%;font-size:.7rem;font-weight:700;display:grid;place-items:center;color:var(--omr);transition:background .15s}
+  .rb.filled{background:#111;border-color:#111;color:#fff}
+  .roll-box{width:24px;height:26px;border:1.3px solid var(--omr);display:grid;place-items:center;font-weight:800;font-size:.9rem;margin-bottom:4px}
+
+  .choice-row{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-weight:700;color:var(--ink);min-height:48px;text-align:left}
+  .chip .dot{width:22px;height:22px;border:2px solid var(--omr);border-radius:50%;flex:none;display:grid;place-items:center}
+  .chip.on{border-color:var(--navy);background:var(--b-soft)}
+  .chip.on .dot{background:#111;border-color:#111;box-shadow:inset 0 0 0 3px #fff}
+  .med-row .chip{flex:1 1 200px}
+  .lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media (max-width:640px){.lang-grid{grid-template-columns:repeat(3,1fr)}}
+  .lang-grid .chip{flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;gap:4px;text-align:center}
+  .lang-grid .native{font-size:1.25rem;line-height:1.4;color:var(--navy)}
+  .lang-grid .ml{font-size:.9rem}
+  .field.muted{background:#f3f5f8;border-style:dashed}
+  .field.muted input{background:#e7ebf0;color:#8792a2}
+  .note-red{color:var(--bad);font-size:.8rem;font-weight:700;margin-top:4px}
+  #sigCanvas{width:100%;height:70px;border:1px dashed #8a95a5;border-radius:6px;background:#fafbfc;touch-action:none;display:block}
+  .link-btn{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.8rem;padding:4px 0}
+
+  .btn{border:0;border-radius:10px;padding:14px 20px;font-weight:800;font-size:1.05rem}
+  .btn-main{background:var(--navy);color:#fff;width:100%}
+  .btn-main:hover{background:var(--navy-2)}
+  .btn-go{background:var(--ok);color:#fff;width:100%}
+  .btn-line{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+
+  /* Sticky exam bar */
+  .exambar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(11,60,104,.08)}
+  .exambar .wrap{padding:10px 14px}
+  .exambar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.9rem}
+  .who{flex:1;min-width:0;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .who small{display:block;font-weight:600;color:var(--muted);font-size:.78rem}
+  .count{flex:none;font-weight:800;color:var(--ink);white-space:nowrap;text-align:right;line-height:1.2}
+  .count small{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
+  .count b{color:var(--ok);font-size:1.15rem}
+  .bar{height:8px;background:#e3e8ee;border-radius:99px;margin-top:8px;overflow:hidden;display:flex}
+  .bar i{display:block;height:100%;transition:width .25s}
+  .bar .ia{background:var(--a)} .bar .ib{background:var(--b)} .bar .ic{background:var(--c)}
+  .jump{display:flex;gap:6px;margin-top:8px;overflow-x:auto}
+  .jump button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:.8rem;font-weight:700;color:var(--muted)}
+
+  /* Subject headers */
+  .subj{margin-top:26px}
+  .subj-head{border-radius:var(--r);padding:14px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .subj-head h2{margin:0;font-size:1.15rem;line-height:1.3}
+  .subj-head p{margin:2px 0 0;font-size:.85rem;opacity:.9}
+  .subj-head .tally{background:rgba(255,255,255,.18);border-radius:8px;padding:6px 10px;font-weight:800;font-size:.9rem;white-space:nowrap}
+  .subj.A .subj-head{background:var(--a)} .subj.B .subj-head{background:var(--b)} .subj.C .subj-head{background:var(--c)}
+
+  /* Question card */
+  .q{background:#fff;border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-top:12px}
+  .q.answered{border-color:#9dc3a9}
+  .q-top{display:flex;gap:12px;align-items:flex-start}
+  .qn{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.95rem;color:#fff}
+  .A .qn{background:var(--a)} .B .qn{background:var(--b)} .C .qn{background:var(--c)}
+  .q-text{font-weight:700;font-size:1.02rem;flex:1;min-width:0;padding-top:4px;overflow-wrap:anywhere}
+  .q-text[dir=rtl]{text-align:right}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  @media (max-width:560px){.opts{grid-template-columns:1fr}}
+  .opt{display:flex;align-items:center;gap:12px;width:100%;border:2px solid var(--line);background:#fafbfd;border-radius:10px;padding:10px 12px;text-align:left;color:var(--ink);min-height:52px;transition:border-color .12s,background .12s}
+  .opt:hover{border-color:#9fb0c4}
+  .opt .bub{flex:none;width:32px;height:32px;border-radius:50%;border:2px solid var(--omr);color:var(--omr);display:grid;place-items:center;font-weight:800;font-size:.95rem;font-family:'Anek Malayalam',sans-serif;transition:background .15s,transform .15s}
+  .opt .ot{flex:1;min-width:0;overflow-wrap:anywhere;font-weight:600}
+  .opt[dir=rtl]{text-align:right}
+  .opt.picked{border-color:#111;background:#fff}
+  .opt.picked .bub{background:#111;border-color:#111;color:#fff;transform:scale(1.06)}
+
+  /* Answer status panel */
+  .status{background:#fff;border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-top:28px}
+  .status h3{margin:0 0 4px;font-size:1.05rem;color:var(--navy)}
+  .status p{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+  .dots{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+  .dots button{aspect-ratio:1;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-weight:800;font-size:.8rem;color:var(--muted);padding:0}
+  .dots button.done{background:var(--ok-soft);border-color:#86c79c;color:var(--ok)}
+  .legend{display:flex;gap:14px;font-size:.8rem;color:var(--muted);margin-top:10px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px;border:1.5px solid var(--line)}
+  .legend i.g{background:var(--ok-soft);border-color:#86c79c}
+
+  /* Result */
+  .card{background:#fff;border:1.5px solid var(--line);border-radius:var(--r);padding:18px;margin-top:18px}
+  .card h2{margin:0 0 6px;color:var(--navy);font-size:1.2rem}
+  .card p.lead{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+  .roll-input{width:100%;padding:14px;border:2px solid var(--navy);border-radius:10px;font-size:1.5rem;font-weight:800;letter-spacing:.35em;text-align:center}
+  .res-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:2px solid var(--navy);padding-bottom:12px;margin-bottom:14px}
+  .res-head h3{margin:0;color:var(--navy);font-size:1.1rem}
+  .res-head .meta{font-size:.9rem;color:var(--muted);margin-top:4px}
+  .res-head .meta b{color:var(--ink)}
+  .total{flex:none;text-align:center;background:var(--navy);color:#fff;border-radius:12px;padding:10px 16px;min-width:108px}
+  .total .big{font-size:2.1rem;font-weight:800;line-height:1}
+  .total .of{font-size:.85rem;opacity:.85}
+  .subj-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid #e6ebf1}
+  .subj-row .nm{font-weight:700}
+  .subj-row .nm small{display:block;color:var(--muted);font-weight:600;font-size:.8rem}
+  .subj-row .sc{font-weight:800;font-size:1.2rem;text-align:right}
+  .subj-row .meter{grid-column:1/-1;height:10px;background:#e8edf3;border-radius:99px;overflow:hidden}
+  .subj-row .meter i{display:block;height:100%}
+  .grade{margin-top:14px;padding:12px 14px;border-radius:10px;font-weight:700}
+  details{margin-top:16px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px}
+  summary{cursor:pointer;font-weight:800;color:var(--navy);padding:12px 0}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin-bottom:12px}
+  th,td{border:1px solid #d9e0e8;padding:6px;text-align:center}
+  th{background:var(--navy);color:#fff}
+  tr.ok td{background:var(--ok-soft)} tr.bad td{background:var(--bad-soft)} tr.na td{background:#f5f6f8;color:var(--muted)}
+  .tbl-wrap{overflow-x:auto}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn-row .btn{flex:1 1 200px}
+  .err{background:var(--bad-soft);color:var(--bad);border:1.5px solid #f3b4b4;border-radius:10px;padding:12px;font-weight:700;margin-top:14px}
+  .done-banner{background:var(--ok-soft);border:1.5px solid #86c79c;color:var(--ok);border-radius:var(--r);padding:16px;font-weight:700;margin-top:18px}
+  .done-banner b{display:block;font-size:1.1rem;margin-bottom:2px}
+
+
+  /* Answer review */
+  .rv-wrap{margin-top:22px;border-top:2px solid var(--navy);padding-top:16px}
+  .rv-title{margin:0 0 4px;color:var(--navy);font-size:1.15rem}
+  .rv-wrap .lead{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+  .rv-filter{display:flex;gap:8px;flex-wrap:wrap}
+  .rv-filter button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:.85rem;color:var(--muted)}
+  .rv-filter button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .rv-sec{margin-top:18px}
+  .rv{break-inside:avoid;page-break-inside:avoid}
+  .rv.rv-ok{border-color:#86c79c} .rv.rv-bad{border-color:#f0a3a3}
+  .r-opt{cursor:default}
+  .r-opt:hover{border-color:var(--line)}
+  .r-opt.r-key{border-color:var(--ok);background:var(--ok-soft)}
+  .r-opt.r-key .bub{background:var(--ok);border-color:var(--ok);color:#fff}
+  .r-opt.r-wrong{border-color:var(--bad);background:var(--bad-soft)}
+  .r-opt.r-wrong .bub{background:var(--bad);border-color:var(--bad);color:#fff}
+  .r-tag{display:block;font-size:.75rem;font-weight:800;margin-top:2px;font-family:'Anek Malayalam',sans-serif}
+  .r-key .r-tag{color:var(--ok)} .r-wrong .r-tag{color:var(--bad)}
+  .rv-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .rv-badge{font-weight:800;font-size:.85rem;padding:4px 10px;border-radius:8px}
+  .rv-badge.ok{background:var(--ok-soft);color:var(--ok)} .rv-badge.bad{background:var(--bad-soft);color:var(--bad)} .rv-badge.na{background:#eef1f4;color:var(--muted)}
+  .rv-key{font-size:.9rem;color:var(--ink)}
+
+
+  /* Reading passage */
+  .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.05;font-weight:700}
+  .frac-n{border-bottom:1.5px solid currentColor;padding:0 2px;font-size:.85em}
+  .frac-d{padding:0 2px;font-size:.85em}
+  .stl{display:block;margin-top:6px;font-weight:500}
+  .stl>span{display:block}
+  .passage{background:#fffaf0;border:1.5px solid #f0c987;border-radius:var(--r);padding:14px 16px;margin-top:12px}
+  .passage-h{font-weight:800;color:#8a4b08;font-size:.95rem;border-bottom:1px solid #f0d8b0;padding-bottom:8px;margin-bottom:10px}
+  .poem{border-left:4px solid #e0a23a;padding-left:14px;font-weight:600;line-height:1.7}
+  .poem p{margin:0}
+  .poet{text-align:right;font-weight:800;color:#8a4b08;margin-top:8px}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(15,25,40,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal.show{display:flex}
+  .modal-box{background:#fff;border-radius:14px;max-width:400px;width:100%;padding:22px;text-align:center;border-top:6px solid var(--navy)}
+  .modal-box h3{margin:0 0 8px;color:var(--navy);font-size:1.15rem}
+  .modal-box p{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+  .modal-btns{display:flex;gap:10px}
+  .modal-btns .btn{flex:1;padding:12px}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media print{
+    body{background:#fff}
+    .mast,.exambar,.no-print,#screenReg,#screenExam,.lookup{display:none!important}
+    #screenResult{display:block!important}
+    .card{border:0;padding:0}
+    details{border:0} details>*{display:block}
+  }
+</style>
+</head>
+<body>
+
+<header class="mast no-print">
+  <div class="wrap">
+    <div class="mast-row">
+      <div>
+        <h1>SMART VIDHYA USS MODEL EXAM 5</h1>
+        <p>പേപ്പർ 1 &nbsp;|&nbsp; 50 ചോദ്യങ്ങൾ &nbsp;|&nbsp; ഓൺലൈൻ OMR പരീക്ഷ</p>
+      </div>
+      <button class="btn-ghost" onclick="goResult()">റിസൾട്ട് നോക്കുക</button>
+    </div>
+    <div class="steps" id="stepBar">
+      <span data-s="1">1. രജിസ്ട്രേഷൻ</span>
+      <span data-s="2">2. പരീക്ഷ എഴുതുക</span>
+      <span data-s="3">3. റിസൾട്ട്</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STEP 1: REGISTRATION ============ -->
+<main id="screenReg" class="screen">
+  <div class="wrap">
+    <div class="sheet">
+      <div class="sheet-title">OMR ANSWER SHEET (PAPER I) &nbsp;|&nbsp; രജിസ്ട്രേഷൻ</div>
+
+      <div class="grid2">
+        <div>
+          <div class="field">
+            <label for="studentName">Name of the Candidate (കുട്ടിയുടെ പേര്)</label>
+            <input type="text" id="studentName" placeholder="NAME IN CAPITAL LETTERS" autocomplete="off"
+              oninput="this.value=this.value.replace(/[^a-zA-Z\s]/g,'').toUpperCase()">
+          </div>
+
+          <div class="field">
+            <label for="studentRoll">Roll Number (ഫോൺ നമ്പറിന്റെ അവസാന 6 അക്കങ്ങൾ)</label>
+            <input type="text" id="studentRoll" maxlength="6" inputmode="numeric" placeholder="6 അക്ക റോൾ നമ്പർ" autocomplete="off"
+              oninput="this.value=this.value.replace(/\D/g,'');updateRollBubbles(this.value)">
+            <div class="roll-matrix" id="rollMatrix"></div>
+            <div class="hint">നമ്പർ ടൈപ്പ് ചെയ്യുമ്പോൾ OMR ബബിളുകൾ തനിയെ കറുപ്പിക്കപ്പെടും. റിസൾട്ട് നോക്കാൻ ഈ നമ്പർ ഓർത്തുവെക്കുക.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="field">
+            <span class="lbl">Gender</span>
+            <div class="choice-row" data-group="gender">
+              <button type="button" class="chip" data-val="Male"><span class="dot"></span>Male (ആൺ)</button>
+              <button type="button" class="chip" data-val="Female"><span class="dot"></span>Female (പെൺ)</button>
+            </div>
+          </div>
+
+          <div class="field muted">
+            <span class="lbl">Question Booklet No &amp; Set</span>
+            <input type="text" value="DISABLED" disabled>
+            <div class="note-red">ഇത് സെലക്ട് ചെയ്യേണ്ടതില്ല</div>
+          </div>
+
+          <div class="field">
+            <span class="lbl">Signature of Candidate</span>
+            <canvas id="sigCanvas"></canvas>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <button type="button" class="link-btn" onclick="clearSig()">Clear</button>
+              <span class="note-red" style="margin:0">ഒപ്പ് ഇടേണ്ടതില്ല</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Medium (മീഡിയം തിരഞ്ഞെടുക്കുക)</span>
+        <div class="choice-row med-row" data-group="med">
+          <button type="button" class="chip" data-val="Malayalam"><span class="dot"></span>മലയാളം മീഡിയം</button>
+          <button type="button" class="chip" data-val="English"><span class="dot"></span>ഇംഗ്ലീഷ് മീഡിയം (English Medium)</button>
+        </div>
+        <div class="hint">ഗണിത ചോദ്യങ്ങൾ ഈ മീഡിയത്തിലായിരിക്കും.</div>
+      </div>
+
+      <div class="field">
+        <span class="lbl">1st Language (ഒന്നാം ഭാഷ തിരഞ്ഞെടുക്കുക)</span>
+        <div class="lang-grid" data-group="lang" id="langGrid"></div>
+      </div>
+
+      <button class="btn btn-main" onclick="startExam()">പരീക്ഷ ആരംഭിക്കുക</button>
+    </div>
+  </div>
+</main>
+
+<!-- ============ STEP 2: EXAM ============ -->
+<div id="screenExam" class="screen">
+  <div class="exambar">
+    <div class="wrap">
+      <div class="exambar-row">
+        <div class="who" id="whoBox"></div>
+        <div class="count"><b id="ansCount">0</b> / 50<small>ഉത്തരം നൽകി</small></div>
+      </div>
+      <div class="bar" id="progBar"><i class="ia"></i><i class="ib"></i><i class="ic"></i></div>
+      <div class="jump" id="jumpRow"></div>
+    </div>
+  </div>
+  <main class="wrap" id="paper"></main>
+</div>
+
+<!-- ============ STEP 3: RESULT ============ -->
+<main id="screenResult" class="screen">
+  <div class="wrap">
+    <div id="doneBanner"></div>
+    <div class="card lookup">
+      <h2>റിസൾട്ട് പരിശോധിക്കുക (Check Result)</h2>
+      <p class="lead">രജിസ്ട്രേഷനിൽ നൽകിയ 6 അക്ക റോൾ നമ്പർ ടൈപ്പ് ചെയ്യുക.</p>
+      <input type="text" id="lookupRoll" class="roll-input" maxlength="6" inputmode="numeric" placeholder="------"
+        oninput="this.value=this.value.replace(/\D/g,'')" onkeydown="if(event.key==='Enter')checkResult()">
+      <div class="btn-row">
+        <button class="btn btn-main" onclick="checkResult()">റിസൾട്ട് കാണുക</button>
+      </div>
+      <div id="lookupErr"></div>
+    </div>
+    <div id="resultOut"></div>
+    <div class="btn-row no-print" style="margin-top:22px">
+      <button class="btn btn-line" onclick="newExam()">പുതിയ കുട്ടിക്ക് പരീക്ഷ എഴുതാൻ</button>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <h3 id="mTitle"></h3>
+    <p id="mMsg"></p>
+    <div class="modal-btns" id="mBtns"></div>
+  </div>
+</div>
+
+<script>
+/* Fraction / statement helpers */
+function F(n, d){ return '<span class="frac"><span class="frac-n">'+n+'</span><span class="frac-d">'+d+'</span></span>'; }
+function MF(w, n, d){ return '<span style="white-space:nowrap">'+w+F(n, d)+'</span>'; }
+function ST(lines){ return '<span class="stl">'+lines.map(function(l){ return '<span>'+l+'</span>'; }).join('')+'</span>'; }
+
+/* Answer keys: Malayalam AT & Urdu share one key (Q1-15); Arabic has its own */
+var FIRST_LANG_KEY = { 1:'D', 2:'A', 3:'B', 4:'B', 5:'C', 6:'B', 7:'B', 8:'B', 9:'B', 10:'B', 11:'B', 12:'C', 13:'B', 14:'A', 15:'B' };
+var ARABIC_KEY     = { 1:'A', 2:'C', 3:'B', 4:'B', 5:'C', 6:'B', 7:'B', 8:'B', 9:'B', 10:'A', 11:'B', 12:'C', 13:'B', 14:'A', 15:'B' };
+var MASTER_EVALUATION_KEY = {
+  "Malayalam AT": FIRST_LANG_KEY, "Urdu": FIRST_LANG_KEY, "Arabic": ARABIC_KEY,
+  "Malayalam BT": { 16:'C', 17:'C', 18:'C', 19:'A', 20:'A', 21:'A', 22:'C', 23:'D', 24:'C', 25:'C', 26:'B', 27:'C', 28:'B', 29:'B', 30:'C' },
+  "Maths": { 31:'B', 32:'A', 33:'B', 34:'A', 35:'C', 36:'D', 37:'B', 38:'B', 39:'B', 40:'B', 41:'C', 42:'B', 43:'A', 44:'B', 45:'C', 46:'A', 47:'C', 48:'B', 49:'B', 50:'A' }
+};
+
+/* Reading passages */
+var ARABIC_PASSAGE = '<div class="passage"><div class="passage-h font-arabic" dir="rtl" style="text-align:right">اِقْرَأِ النَّصَّ الْآتِيَ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ (١٣ - ١٥):</div>'+
+  '<div class="poem font-arabic" dir="rtl" style="text-align:right;border-left:0;border-right:4px solid #e0a23a;padding-left:0;padding-right:14px;font-weight:400;line-height:1.9">«حَافِظ إِبْرَاهِيم شَاعِرٌ مِصْرِيٌّ، وُلِدَ فِي مِصْرَ عَامَ ١٨٧٢ م، وَلُقِّبَ بِشَاعِرِ النِّيلِ، بَدَأَ حَافِظ إِبْرَاهِيم حَيَاتَهُ الشِّعْرِيَّةَ فِي سِنٍّ مُبَكِّرَةٍ، وَيُعَدُّ مِنْ أَهَمِّ شُعَرَاءِ الْعَصْرِ الْحَدِيثِ فِي مِصْرَ. نَظَمَ قَصَائِدَ كَثِيرَةً لِلْأَطْفَالِ وَالْوَطَنِ، وَتُوُفِّيَ فِي الْقَاهِرَةِ عَامَ ١٩٣٢ م.»</div></div>';
+
+var PASSAGES = {
+  26: '<div class="passage"><div class="passage-h">താഴെ കൊടുത്തിരിക്കുന്ന കഥ വായിച്ച് 26 മുതൽ 30 വരെയുള്ള ചോദ്യങ്ങൾക്ക് ഉത്തരം എഴുതുക<br><small style="font-weight:600;color:#5b6778">എം. ടി. വാസുദേവൻ നായരുടെ ‘രണ്ടാമൂഴം’ എന്ന നോവലിൽ നിന്നുള്ള കഥാഭാഗം</small></div>'+
+  '<div class="poem" style="font-weight:500;text-align:justify">“ഗുരുനാഥൻ തങ്ങളെ നോക്കി പുഞ്ചിരിച്ചു. ‘നിങ്ങളിൽ ആരാണ് ആ മരക്കൊമ്പിലിരിക്കുന്ന കിളിയുടെ കണ്ണു മാത്രം കാണുന്നത്?’ ഓരോരുത്തരായി മുന്നോട്ടുവന്നു. രാജകുമാരന്മാരിൽ പലരും മരവും കൊമ്പുകളും ആകാശവും പക്ഷിയെയുമെല്ലാം കാണുന്നുണ്ടെന്നു പറഞ്ഞു. ദ്രോണർ തൃപ്തനായില്ല. ഒടുവിൽ വില്ലുമായി അർജുനൻ മുന്നോട്ടുവന്നു. അർജുനന്റെ കണ്ണ് ലക്ഷ്യത്തിൽ മാത്രമായിരുന്നു. അരികിൽ നിന്ന ഭീമന്റെ മനസ്സിൽ അപ്പോൾ മറ്റ് ചിന്തകളായിരുന്നു. വിദ്യ അഭ്യസിക്കുന്നതിൽ താൻ അർജുനനോളം എത്തുന്നില്ലല്ലോ എന്ന ചിന്തയല്ല, മറിച്ച് തന്റെ കൈകളിലെ ഗദയുടെ ശക്തിയിലും, ഉള്ളിലെ വിശപ്പിലുമായിരുന്നു അവന്റെ ശ്രദ്ധ. വില്ലു കുലച്ച് നിൽക്കുന്ന അനുജനെ നോക്കി ഭീമൻ നിശ്ശബ്ദനായി സ്വയം പറഞ്ഞു: ‘ലക്ഷ്യബോധം അർജുനന് ദൈവങ്ങൾ നൽകിയ വരദാനമാണ്. എന്നാൽ എന്റെ വഴി വേറെയാണ്; എന്റെ ശക്തി എന്റെ കൈകളിലാണ്.’ ദ്രോണാചാര്യരുടെ ആജ്ഞ കേട്ട നിമിഷം അർജുനന്റെ അമ്പ് ലക്ഷ്യം തുളച്ചു കടന്നു. എല്ലാവരും അർജുനനെ പ്രശംസിച്ചപ്പോൾ, ഭീമൻ തന്റെ ഗദ ഒന്നുകൂടി മുറുകെപ്പിടിച്ചു.”</div></div>'
+};
+function passageFor(q, num){ return (q && q.pre) || PASSAGES[num] || ''; }
+
+var EXAM_QUESTION_BANK = {
+      "Malayalam_AT": [
+        { q: "1. ‘അഗ്നിശലഭങ്ങൾ’ ആരുടെ കവിതയാണ്?", a: "ചങ്ങമ്പുഴ", b: "എൻ. എ. നസീർ", c: "വള്ളത്തോൾ", d: "ഒ. എൻ. വി" },
+        { q: "2. കവിതയിൽ ‘യാത്ര’ തുടരുന്നത് ആരാണ്?", a: "കവി", b: "യാത്രക്കാരൻ", c: "ഗായകൻ", d: "സുഹൃത്ത്" },
+        { q: "3. കവിതയിലെ യാത്രയ്ക്ക് എന്തില്ല എന്നാണ് കവി പറയുന്നത്?", a: "സന്തോഷം", b: "തളർച്ച", c: "സംഗീതം", d: "സൗഹൃദം" },
+        { q: "4. ‘തുടരുന്നു’ എന്ന പദത്തിന്റെ വിപരീതപദം ഏത്?", a: "ആരംഭിക്കുന്നു", b: "അവസാനിക്കുന്നു", c: "വളരുന്നു", d: "ഉയരുന്നു" },
+        { q: "5. കവിതയിൽ പ്രധാനമായി കടന്നുവരുന്ന കല ഏത്?", a: "ചിത്രകല", b: "ശിൽപകല", c: "സംഗീതം", d: "നൃത്തം" },
+        { q: "6. കവിതയുടെ ചിത്രത്തിൽ കാണുന്ന സംഗീതോപകരണം ഏത്?", a: "മൃദംഗം", b: "വീണ", c: "വയലിൻ", d: "തബല" },
+        { q: "7. ‘ഗാനങ്ങൾ’ എന്ന പദത്തിന്റെ അർത്ഥം എന്ത്?", a: "കഥകൾ", b: "പാട്ടുകൾ", c: "ചിത്രങ്ങൾ", d: "യാത്രകൾ" },
+        { q: "8. ‘രാഗങ്ങൾ’ എന്ന പദം ഏത് കലയുമായി ബന്ധപ്പെട്ടതാണ്?", a: "ചിത്രകല", b: "സംഗീതം", c: "നൃത്തം", d: "ശിൽപകല" },
+        { q: "9. ‘ഇന്നലെ’ എന്നതിന്റെ വിപരീതപദം ഏത്?", a: "ഇന്ന്", b: "നാളെ", c: "പണ്ട്", d: "മുമ്പ്" },
+        { q: "10. കവിതയിൽ ‘ഇന്നലെ’ എന്നത് പ്രധാനമായും എന്തിനെ സൂചിപ്പിക്കുന്നു?", a: "ഭാവിയെ", b: "ഭൂതകാലത്തെ", c: "വർത്തമാനകാലത്തെ", d: "സമയമില്ലായ്മയെ" },
+        { q: "11. ‘യാത്ര’ എന്ന പദം കവിതയിൽ സൂചിപ്പിക്കുന്നത് എന്തിനെയാണ്?", a: "ഒരു സ്ഥലത്തുനിന്ന് മറ്റൊരു സ്ഥലത്തേക്കുള്ള സഞ്ചാരം മാത്രം", b: "ജീവിതത്തിന്റെ മുന്നോട്ടുള്ള പ്രയാണം", c: "വിനോദസഞ്ചാരം", d: "വിദ്യാലയത്തിലേക്കുള്ള യാത്ര" },
+        { q: "12. ‘തളർച്ചയേതുമില്ല’ എന്ന പ്രയോഗം സൂചിപ്പിക്കുന്നതെന്ത്?", a: "വിശ്രമിക്കാനുള്ള ആഗ്രഹം", b: "യാത്ര ഉപേക്ഷിക്കാനുള്ള തീരുമാനം", c: "നിരന്തരമായ മുന്നേറ്റം", d: "ഭയം" },
+        { q: "13. കവിതയിൽ പഴയ ഓർമ്മകളോടൊപ്പം പരാമർശിക്കപ്പെടുന്നത് എന്താണ്?", a: "കളികൾ", b: "ഗാനങ്ങളും രാഗങ്ങളും", c: "യാത്രകളും വാഹനങ്ങളും", d: "പുഷ്പങ്ങളും പക്ഷികളും" },
+        { q: "14. ‘സുന്ദരങ്ങൾ’ എന്ന പദത്തിന് ഏറ്റവും യോജിച്ച അർത്ഥം ഏത്?", a: "മനോഹരമായവ", b: "ദുഃഖകരമായവ", c: "പഴയവ", d: "വലുതായവ" },
+        { q: "15. കവിത നൽകുന്ന പ്രധാന ആശയം ഏത്?", a: "ജീവിതത്തിൽ എപ്പോഴും പിന്നോട്ടു നോക്കണം", b: "ജീവിതയാത്രയിൽ തളരാതെ മുന്നോട്ടുപോകണം", c: "യാത്രകൾ ഒഴിവാക്കണം", d: "പഴയ ഓർമ്മകൾ മറക്കണം" }
+      ],
+
+      "Arabic": [
+        { q: "1. نُشِرَتْ صَحِيفَةُ «الْوَقَائِعِ الْمِصْرِيَّةِ» سَنَةَ:", a: "١٨٢٨ م", b: "١٨٧٢ م", c: "١٩٥٠ م", d: "١٩٤٢ م", cls: "font-arabic" },
+        { q: "2. جَمْعُ كَلِمَةِ «خَيْط»:", a: "خِيَاطَة", b: "أَخْيَاط", c: "خُيُوط", d: "مَخَايِط", cls: "font-arabic" },
+        { q: "3. مَنْ هُوَ الْعَالِمُ الَّذِي كَتَبَ «تَارِيخٌ مُوجَزٌ لِلزَّمَنِ»؟", a: "أَلْبِرْت أَيْنِشْتَايِن", b: "سْتِيفِن هُوكِنْج", c: "جُوخَة الْحَارِثِي", d: "جَالِيلِيُو", cls: "font-arabic" },
+        { q: "4. فَازَتِ الدُّكْتُورَةُ جُوخَة الْحَارِثِي بِجَائِزَةِ «مَان بُوكَر» عَلَى رِوَايَتِهَا:", a: "قَمَرُ بَغْدَاد", b: "سَيِّدَاتُ الْقَمَرِ", c: "بَنَاتُ الرِّيَاحِ", d: "نِسَاءُ الْقَرْيَةِ", cls: "font-arabic" },
+        { q: "5. مَنْ هُوَ الشَّاعِرُ التُّونِسِيُّ الْمُلَقَّبُ بِـ «أَدِيبِ الطُّفُولَةِ»؟", a: "أَبُو الْقَاسِمِ الشَّابِّي", b: "أَحْمَد شَوْقِي", c: "مُحَمَّد الْفَاضِل سُلَيْمَان", d: "حَافِظ إِبْرَاهِيم", cls: "font-arabic" },
+        { q: "6. جَمْعُ كَلِمَةِ «حُلْم»:", a: "حُلَمَاء", b: "أَحْلَام", c: "حَلِيمَات", d: "حُكَّام", cls: "font-arabic" },
+        { q: "7. اِخْتَرِ الْجُمْلَةَ الصَّحِيحَةَ:", a: "كَانَ الْجَوُّ بَارِدٌ", b: "كَانَ الْجَوُّ بَارِدًا", c: "كَانَ الْجَوَّ بَارِدًا", d: "كَانَ الْجَوَّ بَارِدٌ", cls: "font-arabic" },
+        { q: "8. جَمْعُ كَلِمَةِ «كَأْس»:", a: "أَكْيَاس", b: "كُؤُوس", c: "كُؤُوسَات", d: "كَاسَات", cls: "font-arabic" },
+        { q: "9. «جَزَاكَ اللهُ خَيْرًا» تُعَدُّ مِنْ:", a: "أَدَوَاتِ الِاسْتِفْهَامِ", b: "الْكَلِمَاتِ التَّهْذِيبِيَّةِ", c: "أَدَوَاتِ النَّصْبِ", d: "حُرُوفِ الْجَرِّ", cls: "font-arabic" },
+        { q: "10. مُفْرَدُ كَلِمَةِ «أَعْيُن»:", a: "عَيْن", b: "عَيِّنَة", c: "عَوْن", d: "مُعِين", cls: "font-arabic" },
+        { q: "11. اِقْرَإِ الْبَيَانَاتِ الْآتِيَةَ عَنِ «الْوَقَائِعِ الْمِصْرِيَّةِ»:" + ST(["(i) هِيَ أَوَّلُ صَحِيفَةٍ عَرَبِيَّةٍ.", "(ii) نُشِرَتْ سَنَةَ ١٨٢٨ م مِنَ الْقَاهِرَةِ.", "(iii) نُشِرَتْ سَنَةَ ١٩٤٢ م فِي لَنْدَن."]), a: "(i) و (iii) صَحِيحَانِ", b: "(i) و (ii) صَحِيحَانِ", c: "(i) فَقَطْ صَحِيحٌ", d: "كُلُّهَا خَطَأٌ", cls: "font-arabic" },
+        { q: "12. اِقْرَإِ الْبَيَانَاتِ عَنِ الْمُفْرَدِ وَالْجَمْعِ:" + ST(["(i) جَمْعُ «عُضْو» هُوَ «أَعْضَاء»", "(ii) جَمْعُ «كَأْس» هُوَ «أَكْيَاس»", "(iii) جَمْعُ «مَرَض» هُوَ «أَمْرَاض»"]), a: "(i) و (ii) صَحِيحَانِ", b: "(ii) و (iii) صَحِيحَانِ", c: "(i) و (iii) صَحِيحَانِ", d: "كُلُّهَا صَحِيحَةٌ", cls: "font-arabic" },
+        { pre: ARABIC_PASSAGE, q: "13. مَا هُوَ اللَّقَبُ الَّذِي لُقِّبَ بِهِ الشَّاعِرُ حَافِظ إِبْرَاهِيم؟", a: "أَمِيرُ الشُّعَرَاءِ", b: "شَاعِرُ النِّيلِ", c: "أَدِيبُ الطُّفُولَةِ", d: "شَاعِرُ الْخَضْرَاءِ", cls: "font-arabic" },
+        { q: "14. كَمْ سَنَةً عَاشَ الشَّاعِرُ حَافِظ إِبْرَاهِيم؟", a: "٦٠ سَنَة", b: "٥٠ سَنَة", c: "٧٠ سَنَة", d: "٤٠ سَنَة", cls: "font-arabic" },
+        { q: "15. أَيُّ عَصْرٍ أَدَبِيٍّ يَنْتَمِي إِلَيْهِ حَافِظ إِبْرَاهِيم حَسَبَ النَّصِّ؟", a: "الْعَصْرُ الْجَاهِلِيُّ", b: "الْعَصْرُ الْحَدِيثُ", c: "الْعَصْرُ الْعَبَّاسِيُّ", d: "الْعَصْرُ الْأُمَوِيُّ", cls: "font-arabic" }
+      ],
+
+      "Urdu": [
+        { q: "1. وزیرِ تعلیم اب کون ہیں؟", a: "پی جے جوزف", b: "عبد الرب", c: "پروفیسر رویندر ناتھ", d: "ابن شمس الدین", cls: "font-urdu" },
+        { q: "2. کیرلا کا فخر نام کیا ہے؟", a: "کیرلم", b: "کرالا", c: "خیبرالا", d: "خیر اللہ", cls: "font-urdu" },
+        { q: "3. ۔۔۔۔۔ پاس پیسے نہیں ہے۔", a: "میرا", b: "میرے", c: "میری", d: "میں", cls: "font-urdu" },
+        { q: "4. لڑکے میدان میں فٹ بال کھیلتے ۔۔۔۔۔", a: "ہو", b: "ہیں", c: "ہوں", d: "ہے", cls: "font-urdu" },
+        { q: "5. بابائے قوم کی پیدائش کس ریاست میں ہوئی؟", a: "ممبئی", b: "حیدر آباد", c: "گجرات", d: "لکھنؤ", cls: "font-urdu" },
+        { q: "6. اردو زبان میں کل کتنے حروف ہیں؟", a: "۳۵", b: "۳۶", c: "۴۵", d: "۳۰", cls: "font-urdu" },
+        { q: "7. رات میں اندھیرا ہے، دن میں ۔۔۔۔۔ ہے۔", a: "روشنی", b: "اجالا", c: "چاندنی", d: "دھوپ", cls: "font-urdu" },
+        { q: "8. ریل گاڑی چلانے والا ۔۔۔۔۔", a: "ڈرائیور", b: "لوکو پائلٹ", c: "کپتان", d: "پائلٹ", cls: "font-urdu" },
+        { q: "9. چقندر ایک ۔۔۔۔۔ ہے۔", a: "پھل", b: "ترکاری", c: "پھول", d: "اناج", cls: "font-urdu" },
+        { q: "10. مٹی کے برتن بنانے والے کون ہیں؟", a: "سنار", b: "کمہار", c: "لوہار", d: "درزی", cls: "font-urdu" },
+        { q: "11. کیرلم کس پیڑ کے نام سے مشہور ہے؟", a: "ساگوان", b: "ناریل", c: "سپاری", d: "کاجو", cls: "font-urdu" },
+        { q: "12. ۲۰۲۲ عالمی فٹ بال کس ملک نے جیتا؟", a: "انگلینڈ", b: "امریکہ", c: "اسپانیہ", d: "فرانس", cls: "font-urdu" },
+        { q: "13. رحم و کرم دنیا میں دینے والا:", a: "ماں", b: "خدا", c: "باپ", d: "استاد", cls: "font-urdu" },
+        { q: "14. ایک مہینے میں ۳۰ دن ہیں تو ۔۔۔۔۔ ہفتے ملیں گے:", a: "۴", b: "۳", c: "۲", d: "۵", cls: "font-urdu" },
+        { q: "15. محبت کا ضد کیا ہے؟", a: "غصہ", b: "نفرت", c: "الفت", d: "شفقت", cls: "font-urdu" }
+      ],
+
+      "Malayalam_BT": [
+        { q: "16. മഴപ്പെരുമ്പാറയോടൊപ്പം ചൊല്ലിയാടുന്നത് ആരാണ്?", a: "പക്ഷികൾ", b: "കുട്ടികൾ", c: "മുള്ളുവേങ്ങകൾ", d: "പൂച്ചെടികൾ" },
+        { q: "17. ‘പട്ടണം പറന്നുകണ്ട പക്ഷിയായ് ഫാത്തിമത്തുരുത്തിലൊന്നുപോകണം’ - ഈ വരികൾ അർത്ഥമാക്കുന്നത്?", a: "കവി വിദേശത്താണ്", b: "കവി നാട്ടിൻപുറത്തുകാരനാണ്", c: "കവി പട്ടണവാസിയാണ്", d: "പട്ടണംപോലെയാണ് ഫാത്തിമത്തുരുത്ത്" },
+        { q: "18. തുരുത്തിന്റെ നാലുദിക്കിലും കറുത്ത കോട്ട തീർത്ത് നിൽക്കുന്നത് എന്താണ്?", a: "ഇരുട്ട്", b: "മരങ്ങൾ", c: "സെപ്റ്റംബർ മുകിലുകൾ", d: "പക്ഷികൾ" },
+        { q: "19. ‘പൂനിലാവ്’ എന്ന പദം വിഗ്രഹിച്ചാൽ ശരിയായത് ഏത്?", a: "പൂ പോലെയുള്ള നിലാവ്", b: "പൂവും നിലാവും", c: "പൂവിലെ നിലാവ്", d: "പൂവാകുന്ന നിലാവ്" },
+        { q: "20. വേനൽ കനത്തുവരുമ്പോൾ പാനശീലം ഉപേക്ഷിക്കുന്നത് ആരാണ്?", a: "പക്ഷികൾ", b: "പൂച്ചകൾ", c: "കയ്യോന്നികൾ", d: "തെങ്ങുകൾ" },
+        { q: "21. ‘വേരുണങ്ങി’ എന്ന പദം പിരിച്ചെഴുതിയാൽ ശരിയായത്?", a: "വേര് + ഉണങ്ങി", b: "വേരു + ണങ്ങി", c: "വേർ + ണങ്ങി", d: "വേരും + ഉണങ്ങി" },
+        { q: "22. പൂനിലാവിന്റെ വലവീശി ആരെ ഇണക്കണം എന്നാണ് ‘ഫാത്തിമത്തുരുത്ത്’ എന്ന കവിതയിൽ കവി പറയുന്നത്?", a: "പൂക്കളെ", b: "പക്ഷികളെ", c: "കൊപ്ലിമീനിനെ", d: "കാട്ടുമുല്ലകളെ" },
+        { q: "23. താഴെകൊടുത്തിരിക്കുന്നവയിൽ കുരീപ്പുഴ ശ്രീകുമാറിന്റെ രചനകളിൽ പെടാത്തതേത്?", a: "ജസ്സി", b: "പെണങ്ങുണ്ണി", c: "അമ്മമലയാളം", d: "അപ്പൂപ്പൻതാടി" },
+        { q: "24. വേനലിൽ വേരുണങ്ങിവീഴുന്നത് എന്താണ്?", a: "മരങ്ങൾ", b: "കയ്യോന്നികൾ", c: "കാട്ടുമുല്ലകൾ", d: "മുക്കുറ്റികൾ" },
+        { q: "25. ‘വഞ്ചി’ എന്ന പദത്തിന് പര്യായമല്ലാത്തത് ഏത്?", a: "ഓടം", b: "നൗക", c: "കൗമുദി", d: "തോണി" },
+        { q: "26. ഗുരുനാഥനായ ദ്രോണാചാര്യർ ശിഷ്യന്മാരോട് എന്താണ് നിരീക്ഷിക്കാൻ ആവശ്യപ്പെട്ടത്?", a: "മരത്തിന്റെ ഉയരവും ശാഖകളും", b: "മരക്കൊമ്പിലിരിക്കുന്ന കിളിയുടെ കണ്ണ്", c: "കാറ്റിന്റെ ദിശയും വേഗതയും", d: "വില്ലിന്റെ നാണിന്റെ മുറുക്കം" },
+        { q: "27. വില്ലു കുലച്ചു നിൽക്കുമ്പോൾ അർജുനന്റെ ശ്രദ്ധ എവിടെയായിരുന്നു?", a: "തന്റെ ചുറ്റുമുള്ള സഹോദരന്മാരിൽ", b: "ഗുരുനാഥന്റെ പ്രശംസയിൽ", c: "ലക്ഷ്യത്തിൽ മാത്രം", d: "തന്റെ ആയുധത്തിന്റെ ഭംഗിയിൽ" },
+        { q: "28. അർജുനന്റെ ലക്ഷ്യബോധത്തെക്കുറിച്ച് ഭീമൻ സ്വയം മനസ്സിൽ കരുതിയത് എന്താണ്?", a: "തനിക്കും വില്ലുവിദ്യയിൽ അർജുനനെപ്പോലെ ആകണം", b: "ലക്ഷ്യബോധം അർജുനന് ദൈവങ്ങൾ നൽകിയ വരദാനമാണ്", c: "അർജുനൻ തന്നെക്കാൾ ശക്തനാണ്", d: "ദ്രോണാചാര്യർ അർജുനനെ മാത്രമേ സ്നേഹിക്കുന്നുള്ളൂ" },
+        { q: "29. ഈ കഥാഭാഗത്ത് ഭീമന്റെ കഥാപാത്ര സവിശേഷതയായി നിഴലിക്കുന്നത് എന്താണ്?", a: "അനുജനോടുള്ള അസൂയയും ദേഷ്യവും", b: "സ്വന്തം ശക്തിയിലും വ്യക്തിത്വത്തിലുമുള്ള തിരിച്ചറിവും ആത്മവിശ്വാസവും", c: "ഗുരുവിനോടുള്ള അനുസരണക്കേട്", d: "വില്ലുവിദ്യ പഠിക്കാനുള്ള ആഗ്രഹം" },
+        { q: "30. മഹാഭാരത കഥയെ ഭീമന്റെ കോണിലൂടെ പുനരാവിഷ്കരിച്ച ‘രണ്ടാമൂഴം’ എന്ന നോവൽ രചിച്ചതാര്?", a: "സി. വി. രാമൻ പിള്ള", b: "തകഴി ശിവശങ്കരപ്പിള്ള", c: "എം. ടി. വാസുദേവൻ നായർ", d: "പി. വത്സല" }
+      ],
+
+      "Mathematics_Malayalam": [
+        { q: "31. ഒരു സമഭുജ ത്രികോണത്തിന്റെ ഒരു കോണിന്റെ അളവ് എത്ര?", a: "90°", b: "60°", c: "45°", d: "120°" },
+        { q: "32. ഒരു ത്രികോണത്തിലെ രണ്ടു കോണുകൾ 50°, 70° ആയാൽ മൂന്നാമത്തെ കോൺ?", a: "60°", b: "70°", c: "80°", d: "50°" },
+        { q: "33. " + F(3, 5) + " × " + F(2, 3) + " കണക്കാക്കിയാൽ കിട്ടുന്ന തുക എത്ര?", a: F(5, 8), b: F(2, 5), c: F(6, 8), d: F(1, 5) },
+        { q: "34. " + F(4, 7) + " ന്റെ വ്യുൽക്രമം (Reciprocal) ഏതാണ്?", a: F(7, 4), b: "−" + F(4, 7), c: F(1, 4), d: "1" },
+        { q: "35. " + F(3, 4) + " ÷ " + F(1, 2) + " ന്റെ വില എത്രയാണ്?", a: F(3, 8), b: F(2, 3), c: F(3, 2), d: F(1, 4) },
+        { q: "36. ഒരേ വരിയിലുള്ള ബിന്ദുക്കൾ മാത്രം ഉപയോഗിച്ച് വരയ്ക്കാൻ കഴിയാത്ത രൂപം:", a: "രേഖാഖണ്ഡം", b: "രശ്മി", c: "രേഖ", d: "ത്രികോണം" },
+        { q: "37. പരസ്പരം ലംബമായി കൂട്ടിമുട്ടുന്ന രണ്ട് വരകൾക്കിടയിലെ കോണളവ്?", a: "180°", b: "90°", c: "45°", d: "60°" },
+        { q: "38. ചുറ്റളവ് 24 സെ.മീ ആയ ഒരു സമചതുരത്തിന്റെ വശത്തിന്റെ നീളം?", a: "4 സെ.മീ", b: "6 സെ.മീ", c: "8 സെ.മീ", d: "12 സെ.മീ" },
+        { q: "39. പാദം 8 cm, ഉയരം 5 cm ആയ ത്രികോണത്തിന്റെ പരപ്പളവ് എത്ര?", a: "40 cm²", b: "20 cm²", c: "13 cm²", d: "26 cm²" },
+        { q: "40. 0.4 × 0.2 ന്റെ ഗുണനഫലം എത്രയാണ്?", a: "0.8", b: "0.08", c: "8.0", d: "0.008" },
+        { q: "41. " + F(7, 100) + " എന്ന ഭിന്നസംഖ്യയെ ദശാംശ രൂപത്തിൽ എഴുതിയാൽ:", a: "0.7", b: "0.007", c: "0.07", d: "7.0" },
+        { q: "42. 4.5 ÷ 10 ന്റെ വില എത്രയാണ്?", a: "45", b: "0.45", c: "0.045", d: "4.50" },
+        { q: "43. ഒരു സംഖ്യയുടെ മൂന്നിരട്ടിയോട് 5 കൂട്ടിയപ്പോൾ 26 കിട്ടി. സംഖ്യ ഏത്?", a: "7", b: "8", c: "9", d: "6" },
+        { q: "44. x − 7 = 15 ആയാൽ 'x' ന്റെ വില എത്ര?", a: "8", b: "22", c: "105", d: "21" },
+        { q: "45. രാമുവിന്റെ തുകയുടെ ഇരട്ടിയേക്കാൾ 10 കൂടുതൽ = 50. രാമുവിന്റെ തുക?", a: "₹30", b: "₹25", c: "₹20", d: "₹15" },
+        { q: "46. രണ്ട് വരകൾ ഖണ്ഡിക്കുമ്പോഴുണ്ടാകുന്ന എതിർക്കോണുകൾ:", a: "തുല്യം", b: "തുക 180°", c: "തുക 90°", d: "വ്യത്യാസം 90°" },
+        { q: "47. ഒരു രേഖീയജോഡിയിലെ ഒരു കോൺ 110° ആയാൽ മറ്റേ കോൺ എത്ര?", a: "90°", b: "80°", c: "70°", d: "110°" },
+        { q: "48. " + MF(2, 1, 2) + " kg പഞ്ചസാര വീതം 6 പാക്കറ്റുകളിലാക്കിയാൽ ആകെ ഭാരം?", a: "12 kg", b: "15 kg", c: "13 kg", d: "10 kg" },
+        { q: "49. നീളം 12 cm, വീതി 8 cm ആയ ചതുരത്തിന്റെ പരപ്പളവ് എത്ര?", a: "40 cm²", b: "96 cm²", c: "48 cm²", d: "20 cm²" },
+        { q: "50. തുടർച്ചയായ മൂന്ന് എണ്ണൽ സംഖ്യകളുടെ തുക 33 ആയാൽ ചെറുത് ഏത്?", a: "10", b: "11", c: "12", d: "9" }
+      ],
+
+      "Mathematics_English": [
+        { q: "31. What is the measure of an angle in an equilateral triangle?", a: "90°", b: "60°", c: "45°", d: "120°" },
+        { q: "32. In a triangle, two angles are 50° and 70°. What is the third angle?", a: "60°", b: "70°", c: "80°", d: "50°" },
+        { q: "33. Find the product: " + F(3, 5) + " × " + F(2, 3), a: F(5, 8), b: F(2, 5), c: F(6, 8), d: F(1, 5) },
+        { q: "34. What is the reciprocal of " + F(4, 7) + "?", a: F(7, 4), b: "−" + F(4, 7), c: F(1, 4), d: "1" },
+        { q: "35. Calculate: " + F(3, 4) + " ÷ " + F(1, 2), a: F(3, 8), b: F(2, 3), c: F(3, 2), d: F(1, 4) },
+        { q: "36. Which geometric shape cannot be formed using collinear points?", a: "Line segment", b: "Ray", c: "Line", d: "Triangle" },
+        { q: "37. What is the angle between two perpendicular lines?", a: "180°", b: "90°", c: "45°", d: "60°" },
+        { q: "38. If the perimeter of a square is 24 cm, what is the length of a side?", a: "4 cm", b: "6 cm", c: "8 cm", d: "12 cm" },
+        { q: "39. Find the area of a triangle with base 8 cm and height 5 cm.", a: "40 cm²", b: "20 cm²", c: "13 cm²", d: "26 cm²" },
+        { q: "40. What is the product of 0.4 × 0.2?", a: "0.8", b: "0.08", c: "8.0", d: "0.008" },
+        { q: "41. Express the fraction " + F(7, 100) + " as a decimal:", a: "0.7", b: "0.007", c: "0.07", d: "7.0" },
+        { q: "42. What is the value of 4.5 ÷ 10?", a: "45", b: "0.45", c: "0.045", d: "4.50" },
+        { q: "43. When 5 is added to three times a number, the result is 26. Find the number.", a: "7", b: "8", c: "9", d: "6" },
+        { q: "44. If x − 7 = 15, then what is the value of 'x'?", a: "8", b: "22", c: "105", d: "21" },
+        { q: "45. Appu has ₹10 more than twice Ramu's money. If Appu has ₹50, how much does Ramu have?", a: "₹30", b: "₹25", c: "₹20", d: "₹15" },
+        { q: "46. Vertically opposite angles formed by two intersecting lines are:", a: "Equal", b: "Sum 180°", c: "Sum 90°", d: "Difference 90°" },
+        { q: "47. If one angle of a linear pair is 110°, what is the measure of the other?", a: "90°", b: "80°", c: "70°", d: "110°" },
+        { q: "48. 6 packets contain " + MF(2, 1, 2) + " kg of sugar each. What is the total weight?", a: "12 kg", b: "15 kg", c: "13 kg", d: "10 kg" },
+        { q: "49. What is the area of a rectangle with length 12 cm and breadth 8 cm?", a: "40 cm²", b: "96 cm²", c: "48 cm²", d: "20 cm²" },
+        { q: "50. The sum of three consecutive natural numbers is 33. Find the smallest number.", a: "10", b: "11", c: "12", d: "9" }
+      ]
+    };
+
+var DB_KEY = 'SMART_USS_EXAMS_DB_EXAM5';
+var DRAFT_KEY = 'SMART_USS_DRAFT_EXAM5';
+
+var LANGS = [
+  { id:'Arabic',       bank:'Arabic',      ml:'അറബിക്',     native:'العربية',  cls:'font-arabic' },
+  { id:'Malayalam AT', bank:'Malayalam_AT', ml:'മലയാളം (AT)', native:'മലയാളം',   cls:'' },
+  { id:'Urdu',         bank:'Urdu',        ml:'ഉറുദു',       native:'اردو',     cls:'font-urdu' }
+];
+function langInfo(id){ for(var i=0;i<LANGS.length;i++) if(LANGS[i].id===id) return LANGS[i]; return LANGS[1]; }
+
+var state = { reg:{}, answers:{} };
+
+/* ---------- helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function store(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function drop(k){ try{ localStorage.removeItem(k); }catch(e){} }
+function db(){ return store(DB_KEY) || {}; }
+
+function showModal(title, msg, btns){
+  $('mTitle').textContent = title; $('mMsg').textContent = msg;
+  var box = $('mBtns'); box.innerHTML = '';
+  (btns || [{t:'ശരി (OK)'}]).forEach(function(b){
+    var el = document.createElement('button');
+    el.className = 'btn ' + (b.cls || 'btn-main'); el.textContent = b.t;
+    el.onclick = function(){ $('modal').classList.remove('show'); if(b.fn) b.fn(); };
+    box.appendChild(el);
+  });
+  $('modal').classList.add('show');
+  box.lastChild.focus();
+}
+
+function showScreen(n){
+  ['screenReg','screenExam','screenResult'].forEach(function(id,i){ $(id).classList.toggle('show', i===n-1); });
+  var spans = document.querySelectorAll('#stepBar span');
+  for(var i=0;i<spans.length;i++){
+    var s = +spans[i].getAttribute('data-s');
+    spans[i].className = s===n ? 'on' : (s<n ? 'done' : '');
+  }
+  window.scrollTo(0,0);
+}
+
+/* ---------- registration ---------- */
+function buildRollMatrix(){
+  var h = '';
+  for(var c=0;c<6;c++){
+    h += '<div class="roll-col"><div class="roll-box" id="rbx_'+c+'"></div>';
+    for(var d=0; d<=9; d++) h += '<div class="rb" id="rb_'+c+'_'+d+'">'+d+'</div>';
+    h += '</div>';
+  }
+  $('rollMatrix').innerHTML = h;
+}
+function updateRollBubbles(v){
+  for(var c=0;c<6;c++){
+    $('rbx_'+c).textContent = v[c] || '';
+    for(var d=0;d<=9;d++) $('rb_'+c+'_'+d).classList.toggle('filled', v[c]===String(d));
+  }
+}
+function buildLangGrid(){
+  $('langGrid').innerHTML = LANGS.map(function(l){
+    return '<button type="button" class="chip" data-val="'+l.id+'"><span class="dot"></span>'+
+      '<span class="native '+l.cls+'">'+l.native+'</span><span class="ml">'+l.ml+'</span></button>';
+  }).join('');
+}
+function wireChoices(){
+  var groups = document.querySelectorAll('[data-group]');
+  for(var i=0;i<groups.length;i++){
+    groups[i].addEventListener('click', function(e){
+      var chip = e.target.closest('.chip'); if(!chip) return;
+      var g = this.getAttribute('data-group');
+      var all = this.querySelectorAll('.chip');
+      for(var j=0;j<all.length;j++) all[j].classList.remove('on');
+      chip.classList.add('on');
+      state.reg[g] = chip.getAttribute('data-val');
+    });
+  }
+}
+
+function startExam(){
+  var name = $('studentName').value.trim();
+  var roll = $('studentRoll').value.trim();
+  var r = state.reg;
+  if(!name || !/^[A-Z\s]+$/.test(name)) return showModal('ശ്രദ്ധിക്കുക','കുട്ടിയുടെ പേര് ഇംഗ്ലീഷ് ക്യാപിറ്റൽ അക്ഷരങ്ങളിൽ നൽകുക.');
+  if(!/^\d{6}$/.test(roll)) return showModal('ശ്രദ്ധിക്കുക','6 അക്ക റോൾ നമ്പർ പൂർണ്ണമായി നൽകുക.');
+  if(!r.gender) return showModal('ശ്രദ്ധിക്കുക','Gender തിരഞ്ഞെടുക്കുക.');
+  if(!r.med) return showModal('ശ്രദ്ധിക്കുക','മീഡിയം (മലയാളം / ഇംഗ്ലീഷ്) തിരഞ്ഞെടുക്കുക.');
+  if(!r.lang) return showModal('ശ്രദ്ധിക്കുക','ഒന്നാം ഭാഷ (അറബിക് / മലയാളം / ഉറുദു) തിരഞ്ഞെടുക്കുക.');
+  if(db()[roll]) return showModal('ഈ റോൾ നമ്പർ ഉപയോഗിച്ചു കഴിഞ്ഞു',
+    'റോൾ നമ്പർ '+roll+' ഉപയോഗിച്ച് ഇതിനകം പരീക്ഷ എഴുതിയിട്ടുണ്ട്. ഒരു റോൾ നമ്പറിൽ ഒരു തവണ മാത്രമേ എഴുതാൻ പറ്റൂ. റിസൾട്ട് കാണാൻ "റിസൾട്ട് നോക്കുക" അമർത്തുക.');
+  r.name = name; r.roll = roll;
+  state.answers = {};
+  save(DRAFT_KEY, state);
+  renderPaper();
+  showScreen(2);
+}
+
+/* ---------- exam paper ---------- */
+function sections(){ return sectionsFor(state.reg.lang, state.reg.med); }
+function sectionsFor(lang, med){
+  var L = langInfo(lang);
+  var mathsBank = med === 'English' ? 'Mathematics_English' : 'Mathematics_Malayalam';
+  return [
+    { id:'A', title:'ഒന്നാം ഭാഷ: '+L.ml, sub:'Part A (1st Language - AT)', from:1, to:15,
+      qs:EXAM_QUESTION_BANK[L.bank], key:MASTER_EVALUATION_KEY[L.id] },
+    { id:'B', title:'മലയാളം (അടിസ്ഥാന പാഠാവലി)', sub:'Part B (Malayalam BT)', from:16, to:30,
+      qs:EXAM_QUESTION_BANK['Malayalam_BT'], key:MASTER_EVALUATION_KEY['Malayalam BT'] },
+    { id:'C', title:(med==='English'?'Mathematics':'ഗണിതം (Mathematics)'), sub:'Part C', from:31, to:50,
+      qs:EXAM_QUESTION_BANK[mathsBank], key:MASTER_EVALUATION_KEY['Maths'] }
+  ];
+}
+
+function renderPaper(){
+  var r = state.reg, L = langInfo(r.lang);
+  $('whoBox').innerHTML = r.name + '<small>Roll: ' + r.roll + ', ' + (r.med==='English'?'English Medium':'മലയാളം മീഡിയം') + ', ' + L.ml + '</small>';
+  var secs = sections(), h = '';
+  $('jumpRow').innerHTML = secs.map(function(s){
+    return '<button onclick="document.getElementById(\'sec'+s.id+'\').scrollIntoView({behavior:\'smooth\'})">'+s.sub.split(' (')[0]+': '+s.title.split(' (')[0]+'</button>';
+  }).join('');
+
+  secs.forEach(function(s){
+    var n = s.to - s.from + 1;
+    h += '<section class="subj '+s.id+'" id="sec'+s.id+'">';
+    h += '<div class="subj-head"><div><h2>'+s.title+'</h2><p>'+s.sub+', ചോദ്യം '+s.from+' മുതൽ '+s.to+' വരെ, '+n+' മാർക്ക്</p></div>'+
+         '<div class="tally" id="tally'+s.id+'">0 / '+n+'</div></div>';
+    s.qs.forEach(function(q, i){
+      var num = s.from + i;
+      var cls = q.cls || '';
+      var rtl = (cls==='font-arabic' || cls==='font-urdu') ? ' dir="rtl"' : '';
+      var text = q.q.replace(/^\s*\d+\s*\.\s*/, '');
+      h += passageFor(q, num);
+      h += '<div class="q" id="q'+num+'"><div class="q-top"><div class="qn">'+num+'</div>'+
+           '<div class="q-text '+cls+'"'+rtl+'>'+text+'</div></div><div class="opts" role="radiogroup" aria-label="ചോദ്യം '+num+'">';
+      ['A','B','C','D'].forEach(function(o){
+        h += '<button type="button" class="opt" role="radio" aria-checked="false" data-q="'+num+'" data-o="'+o+'"'+rtl+'>'+
+             '<span class="bub">'+o+'</span><span class="ot '+cls+'">'+q[o.toLowerCase()]+'</span></button>';
+      });
+      h += '</div></div>';
+    });
+    h += '</section>';
+  });
+
+  h += '<div class="status"><h3>ഉത്തരങ്ങളുടെ സ്ഥിതി</h3>'+
+       '<p>പച്ച നിറമുള്ളവക്ക് ഉത്തരം നൽകി. വെള്ള നിറമുള്ള നമ്പറിൽ തൊട്ടാൽ ആ ചോദ്യത്തിലേക്ക് പോകാം.</p>'+
+       '<div class="dots" id="dots">';
+  for(var k=1;k<=50;k++) h += '<button type="button" data-go="'+k+'">'+k+'</button>';
+  h += '</div><div class="legend"><span><i class="g"></i>ഉത്തരം നൽകി</span><span><i></i>ബാക്കിയുള്ളവ</span></div></div>';
+  h += '<div class="btn-row"><button class="btn btn-go" onclick="confirmSubmit()">പരീക്ഷ സബ്മിറ്റ് ചെയ്യുക (Submit)</button></div>';
+
+  $('paper').innerHTML = h;
+  for(var qn in state.answers) markPick(+qn, state.answers[qn]);
+  refreshProgress();
+}
+
+function markPick(num, opt){
+  var btns = document.querySelectorAll('.opt[data-q="'+num+'"]');
+  for(var i=0;i<btns.length;i++){
+    var on = btns[i].getAttribute('data-o') === opt;
+    btns[i].classList.toggle('picked', on);
+    btns[i].setAttribute('aria-checked', on ? 'true' : 'false');
+  }
+  var card = $('q'+num); if(card) card.classList.add('answered');
+}
+
+function refreshProgress(){
+  var total = 0, per = {A:0,B:0,C:0};
+  for(var qn in state.answers){ total++; qn=+qn; per[qn<=15?'A':(qn<=30?'B':'C')]++; }
+  $('ansCount').textContent = total;
+  var bars = document.querySelectorAll('#progBar i');
+  bars[0].style.width = (per.A/50*100)+'%'; bars[1].style.width = (per.B/50*100)+'%'; bars[2].style.width = (per.C/50*100)+'%';
+  if($('tallyA')){ $('tallyA').textContent = per.A+' / 15'; $('tallyB').textContent = per.B+' / 15'; $('tallyC').textContent = per.C+' / 20'; }
+  var dots = document.querySelectorAll('#dots button');
+  for(var i=0;i<dots.length;i++) dots[i].classList.toggle('done', !!state.answers[i+1]);
+}
+
+document.addEventListener('click', function(e){
+  var opt = e.target.closest('.opt');
+  if(opt){
+    var num = +opt.getAttribute('data-q'), o = opt.getAttribute('data-o');
+    state.answers[num] = o;
+    markPick(num, o); refreshProgress(); save(DRAFT_KEY, state);
+    return;
+  }
+  var fb = e.target.closest('#rvFilter button');
+  if(fb){
+    var f = fb.getAttribute('data-f'), bs = document.querySelectorAll('#rvFilter button');
+    for(var i=0;i<bs.length;i++) bs[i].classList.toggle('on', bs[i]===fb);
+    var cards = document.querySelectorAll('.rv');
+    for(var j=0;j<cards.length;j++) cards[j].style.display = (f==='all' || cards[j].getAttribute('data-st')===f) ? '' : 'none';
+    var secsEl = document.querySelectorAll('.rv-sec');
+    for(var m=0;m<secsEl.length;m++) secsEl[m].style.display = secsEl[m].querySelector('.rv:not([style*="none"])') ? '' : 'none';
+    return;
+  }
+  var go = e.target.closest('[data-go]');
+  if(go){ var t = $('q'+go.getAttribute('data-go')); if(t) t.scrollIntoView({behavior:'smooth', block:'center'}); }
+});
+
+function confirmSubmit(){
+  var left = [];
+  for(var i=1;i<=50;i++) if(!state.answers[i]) left.push(i);
+  var msg = left.length
+    ? left.length+' ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകിയിട്ടില്ല (ചോദ്യം: '+left.slice(0,12).join(', ')+(left.length>12?' ...':'')+'). എന്നാലും സബ്മിറ്റ് ചെയ്യണോ? സബ്മിറ്റ് ചെയ്താൽ പിന്നെ മാറ്റാൻ പറ്റില്ല.'
+    : 'എല്ലാ ചോദ്യങ്ങൾക്കും ഉത്തരം നൽകി. സബ്മിറ്റ് ചെയ്താൽ പിന്നെ ഉത്തരങ്ങൾ മാറ്റാൻ പറ്റില്ല.';
+  showModal('സബ്മിറ്റ് ചെയ്യട്ടെ?', msg, [
+    { t:'തിരികെ പോകുക', cls:'btn-line', fn: left.length ? function(){ $('q'+left[0]).scrollIntoView({behavior:'smooth',block:'center'}); } : null },
+    { t:'സബ്മിറ്റ് ചെയ്യുക', cls:'btn-go', fn: submitExam }
+  ]);
+}
+
+function submitExam(){
+  var r = state.reg, secs = sections(), scores = {};
+  secs.forEach(function(s){
+    var sc = 0;
+    for(var n=s.from;n<=s.to;n++) if(state.answers[n] && state.answers[n] === s.key[n]) sc++;
+    scores[s.id] = sc;
+  });
+  var all = db();
+  all[r.roll] = {
+    name:r.name, roll:r.roll, gender:r.gender, lang:r.lang, med:r.med,
+    partA:scores.A, partB:scores.B, partC:scores.C, total:scores.A+scores.B+scores.C,
+    answers:state.answers, time:new Date().toISOString()
+  };
+  save(DB_KEY, all);
+  drop(DRAFT_KEY);
+  $('doneBanner').innerHTML = '<div class="done-banner no-print"><b>പരീക്ഷ വിജയകരമായി സബ്മിറ്റ് ചെയ്തു!</b>താഴെ റോൾ നമ്പർ നൽകി റിസൾട്ട് കാണാം.</div>';
+  $('lookupRoll').value = r.roll;
+  $('resultOut').innerHTML = ''; $('lookupErr').innerHTML = '';
+  showScreen(3);
+  $('lookupRoll').focus();
+}
+
+/* ---------- result ---------- */
+function goResult(){
+  if($('screenExam').classList.contains('show')){
+    return showModal('പരീക്ഷ നടക്കുകയാണ്','നിങ്ങളുടെ ഉത്തരങ്ങൾ സേവ് ആയിട്ടുണ്ട്. റിസൾട്ട് പേജിലേക്ക് പോകണോ? പിന്നീട് തിരിച്ചു വന്ന് തുടരാം.', [
+      {t:'പരീക്ഷ തുടരുക', cls:'btn-line'}, {t:'റിസൾട്ട് പേജ്', fn:function(){ $('doneBanner').innerHTML=''; showScreen(3); }}
+    ]);
+  }
+  $('doneBanner').innerHTML = ''; showScreen(3); $('lookupRoll').focus();
+}
+
+function checkResult(){
+  var roll = $('lookupRoll').value.trim();
+  $('lookupErr').innerHTML = ''; $('resultOut').innerHTML = '';
+  if(!/^\d{6}$/.test(roll)){ $('lookupErr').innerHTML = '<div class="err">6 അക്ക റോൾ നമ്പർ നൽകുക.</div>'; return; }
+  var rec = db()[roll];
+  if(!rec){ $('lookupErr').innerHTML = '<div class="err">റോൾ നമ്പർ '+roll+' ൽ പരീക്ഷാ വിവരങ്ങൾ ഒന്നും കണ്ടില്ല. നമ്പർ ഒന്നുകൂടി പരിശോധിക്കുക.</div>'; return; }
+  renderResult(rec);
+}
+
+function renderResult(rec){
+  var L = langInfo(rec.lang);
+  var rows = [
+    { nm:'ഒന്നാം ഭാഷ: '+L.ml, sub:'Part A', sc:rec.partA, max:15, col:'var(--a)' },
+    { nm:'മലയാളം (അടിസ്ഥാന പാഠാവലി)', sub:'Part B', sc:rec.partB, max:15, col:'var(--b)' },
+    { nm:'ഗണിതം (Mathematics)', sub:'Part C', sc:rec.partC, max:20, col:'var(--c)' }
+  ];
+  var pct = Math.round(rec.total/50*100);
+  var g = pct>=70 ? ['var(--ok-soft)','var(--ok)','മികച്ച പ്രകടനം! അഭിനന്ദനങ്ങൾ.']
+        : pct>=50 ? ['var(--b-soft)','var(--navy)','നല്ല പ്രകടനം. തെറ്റിയ ചോദ്യങ്ങൾ ഒന്നുകൂടി പഠിക്കൂ.']
+        : ['var(--c-soft)','var(--c)','കൂടുതൽ പരിശീലനം വേണം. താഴെയുള്ള ഉത്തരസൂചിക നോക്കി പഠിക്കൂ.'];
+
+  var h = '<div class="card" id="resultCard">'+
+    '<div class="res-head"><div><h3>SMART VIDHYA USS MODEL EXAM 5, റിസൾട്ട്</h3>'+
+    '<div class="meta"><b>'+rec.name+'</b><br>റോൾ നമ്പർ: <b>'+rec.roll+'</b><br>'+
+    (rec.med==='English'?'English Medium':'മലയാളം മീഡിയം')+', '+L.ml+'</div></div>'+
+    '<div class="total"><div class="big">'+rec.total+'</div><div class="of">/ 50 മാർക്ക്</div></div></div>';
+
+  rows.forEach(function(r){
+    h += '<div class="subj-row"><div class="nm">'+r.nm+'<small>'+r.sub+'</small></div>'+
+         '<div class="sc">'+r.sc+' <span style="color:var(--muted);font-size:.85rem">/ '+r.max+'</span></div>'+
+         '<div class="meter"><i style="width:'+(r.sc/r.max*100)+'%;background:'+r.col+'"></i></div></div>';
+  });
+  h += '<div class="subj-row" style="border:0"><div class="nm">ആകെ മാർക്ക് (Total)</div><div class="sc">'+rec.total+' / 50</div></div>';
+  h += '<div class="grade" style="background:'+g[0]+';color:'+g[1]+'">'+pct+'%, '+g[2]+'</div>';
+
+  var ans = rec.answers || {}, secs = sectionsFor(rec.lang, rec.med);
+  var cOk = 0, cBad = 0, cNa = 0;
+  var rv = '';
+  secs.forEach(function(s){
+    var sc = 0, n = s.to - s.from + 1;
+    for(var k=s.from;k<=s.to;k++) if(ans[k] && ans[k]===s.key[k]) sc++;
+    rv += '<div class="subj '+s.id+' rv-sec"><div class="subj-head"><div><h2>'+s.title+'</h2><p>'+s.sub+', ചോദ്യം '+s.from+' മുതൽ '+s.to+' വരെ</p></div>'+
+          '<div class="tally">'+sc+' / '+n+'</div></div>';
+    s.qs.forEach(function(q, i){
+      var num = s.from + i, key = s.key[num], u = ans[num] || '';
+      var st = !u ? 'na' : (u===key ? 'ok' : 'bad');
+      if(st==='ok') cOk++; else if(st==='bad') cBad++; else cNa++;
+      var cls = q.cls || '';
+      var rtl = (cls==='font-arabic' || cls==='font-urdu') ? ' dir="rtl"' : '';
+      var badge = st==='ok' ? '<span class="rv-badge ok">✔ ശരി, 1 മാർക്ക്</span>'
+                : st==='bad' ? '<span class="rv-badge bad">✘ തെറ്റ്, 0 മാർക്ക്</span>'
+                : '<span class="rv-badge na">ഉത്തരം നൽകിയില്ല</span>';
+      if(passageFor(q, num)) rv += passageFor(q, num).replace('class="passage"','class="passage rv" data-st="p"');
+      rv += '<div class="q rv rv-'+st+'" data-st="'+st+'"><div class="q-top"><div class="qn">'+num+'</div>'+
+            '<div class="q-text '+cls+'"'+rtl+'>'+q.q.replace(/^\s*\d+\s*\.\s*/, '')+'</div></div><div class="opts">';
+      ['A','B','C','D'].forEach(function(o){
+        var oc = o===key ? ' r-key' : (o===u ? ' r-wrong' : '');
+        var tag = o===key && o===u ? '<span class="r-tag">നിങ്ങളുടെ ഉത്തരം, ശരി</span>'
+                : o===key ? '<span class="r-tag">ശരിയുത്തരം</span>'
+                : o===u ? '<span class="r-tag">നിങ്ങളുടെ ഉത്തരം</span>' : '';
+        rv += '<div class="opt r-opt'+oc+(o===u?' r-mine':'')+'"'+rtl+'><span class="bub">'+o+'</span>'+
+              '<span class="ot '+cls+'">'+q[o.toLowerCase()]+tag+'</span></div>';
+      });
+      rv += '</div><div class="rv-foot">'+badge+(st==='bad'?'<span class="rv-key">ശരിയുത്തരം: <b>'+key+'</b></span>':'')+'</div></div>';
+    });
+    rv += '</div>';
+  });
+  h += '<div class="rv-wrap"><h3 class="rv-title">ചോദ്യങ്ങളും ഉത്തരങ്ങളും</h3>'+
+       '<p class="lead">പച്ച നിറത്തിലുള്ളത് ശരിയുത്തരം. ചുവപ്പ് നിറത്തിലുള്ളത് നിങ്ങൾ തിരഞ്ഞെടുത്ത തെറ്റായ ഉത്തരം.</p>'+
+       '<div class="rv-filter no-print" id="rvFilter">'+
+       '<button class="on" data-f="all">എല്ലാം (50)</button>'+
+       '<button data-f="ok">ശരി ('+cOk+')</button>'+
+       '<button data-f="bad">തെറ്റ് ('+cBad+')</button>'+
+       '<button data-f="na">നൽകാത്തവ ('+cNa+')</button></div>'+ rv + '</div>';
+  h += '<div class="btn-row no-print"><button class="btn btn-main" onclick="downloadResult(this)">റിസൾട്ട് PDF ആയി സേവ് ചെയ്യുക</button></div></div>';
+  $('resultOut').innerHTML = h;
+  $('resultCard').scrollIntoView({behavior:'smooth'});
+}
+
+function downloadResult(btn){
+  var el = $('resultCard'), all = document.querySelector('#rvFilter [data-f=all]');
+  if(all) all.click();
+  if(typeof html2pdf === 'undefined'){ window.print(); return; }
+  var old = btn.textContent; btn.disabled = true; btn.textContent = 'PDF തയ്യാറാകുന്നു...';
+  html2pdf().set({
+    margin:[0.3,0.3,0.4,0.3], filename:'USS_Result_'+($('lookupRoll').value||'')+'.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,ignoreElements:function(x){ return x.classList && x.classList.contains('no-print'); }},
+    jsPDF:{unit:'in',format:'a4',orientation:'portrait'}, pagebreak:{mode:['css','legacy']}
+  }).from(el).save().then(done).catch(function(){ window.print(); done(); });
+  function done(){ btn.disabled = false; btn.textContent = old; }
+}
+
+function newExam(){
+  state = { reg:{}, answers:{} };
+  $('studentName').value = ''; $('studentRoll').value = ''; updateRollBubbles('');
+  var chips = document.querySelectorAll('#screenReg .chip.on');
+  for(var i=0;i<chips.length;i++) chips[i].classList.remove('on');
+  $('resultOut').innerHTML = ''; $('lookupRoll').value = ''; $('doneBanner').innerHTML = '';
+  showScreen(1); sizeSig(); clearSig();
+}
+
+/* ---------- signature ---------- */
+var cv, cx, drawing = false;
+function sizeSig(){ if(!cv) return; var r = cv.getBoundingClientRect(); if(r.width){ cv.width = r.width; cv.height = r.height; } }
+function clearSig(){ if(cx){ cx.clearRect(0,0,cv.width,cv.height); cx.beginPath(); } }
+function sigPos(e){ var r = cv.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+function initSig(){
+  cv = $('sigCanvas'); cx = cv.getContext('2d'); sizeSig();
+  cv.addEventListener('pointerdown', function(e){ drawing = true; var p = sigPos(e); cx.beginPath(); cx.moveTo(p[0],p[1]); cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', function(e){ if(!drawing) return; var p = sigPos(e); cx.lineWidth = 2; cx.lineCap = 'round'; cx.strokeStyle = '#111'; cx.lineTo(p[0],p[1]); cx.stroke(); });
+  ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ cv.addEventListener(ev, function(){ drawing = false; }); });
+}
+
+/* ---------- boot ---------- */
+window.addEventListener('load', function(){
+  buildRollMatrix(); buildLangGrid(); wireChoices(); showScreen(1); initSig();
+  var d = store(DRAFT_KEY);
+  if(d && d.reg && d.reg.roll && !db()[d.reg.roll]){
+    showScreen(1);
+    var cnt = Object.keys(d.answers||{}).length;
+    showModal('പൂർത്തിയാക്കാത്ത പരീക്ഷ',
+      d.reg.name+' (Roll '+d.reg.roll+') എന്ന കുട്ടിയുടെ പരീക്ഷ പകുതിയിൽ നിൽക്കുന്നു ('+cnt+' / 50 ഉത്തരം നൽകി). തുടരണോ?', [
+      { t:'പുതിയത് തുടങ്ങുക', cls:'btn-line', fn:function(){ drop(DRAFT_KEY); } },
+      { t:'തുടരുക', fn:function(){ state = d; renderPaper(); showScreen(2); } }
+    ]);
+  } else {
+    showScreen(1);
+  }
+});
+window.addEventListener('resize', sizeSig);
+</script>
+</body>
+</html>
